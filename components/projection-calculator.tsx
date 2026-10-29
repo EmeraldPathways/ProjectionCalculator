@@ -23,6 +23,7 @@ const defaultInput: ProjectionInput = {
 
 export function ProjectionCalculator() {
   const [input, setInput] = useState<ProjectionInput>(defaultInput);
+  const [clientName, setClientName] = useState("");
   const [goalTarget, setGoalTarget] = useState(250_000);
   const [goalFrequency, setGoalFrequency] = useState<ContributionFrequency>("monthly");
   const [mode, setMode] = useState<"growth" | "goal">("growth");
@@ -134,6 +135,17 @@ export function ProjectionCalculator() {
             <p className="header-subtitle">
               Explore how regular saving and investment growth may shape your future.
             </p>
+            <div className="client-name-field">
+              <label htmlFor="client-name">Client name</label>
+              <input
+                id="client-name"
+                type="text"
+                maxLength={100}
+                placeholder="Enter client name"
+                value={clientName}
+                onChange={(event) => setClientName(event.target.value)}
+              />
+            </div>
           </div>
         </div>
         <div className="header-note">
@@ -158,6 +170,7 @@ export function ProjectionCalculator() {
           onReset={resetAssumptions}
         />
         <ResultsPanel
+          clientName={clientName}
           input={projectionInput}
           result={result}
           mode={mode}

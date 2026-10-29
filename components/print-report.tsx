@@ -9,9 +9,11 @@ import type {
 } from "@/lib/calculator";
 import { AnnualTable } from "@/components/annual-table";
 import { GrowthChart } from "@/components/growth-chart";
+import { SummaryMetrics } from "@/components/summary-metrics";
 import { formatCurrency, formatPercent } from "@/lib/format";
 
 type PrintReportProps = {
+  clientName: string;
   input: ProjectionInput;
   result: ProjectionResult;
   mode: "growth" | "goal";
@@ -37,6 +39,7 @@ function withdrawalDescription(input: ProjectionInput): string {
 }
 
 export function PrintReport({
+  clientName,
   input,
   result,
   mode,
@@ -76,7 +79,12 @@ export function PrintReport({
             <p className="eyebrow">Savings and investment illustration</p>
             <h1>{mode === "goal" ? "Savings goal projection" : "Savings growth projection"}</h1>
           </div>
-          <p className="print-date">Prepared {preparedDate}</p>
+          <div className="print-document-meta">
+            {clientName.trim() ? (
+              <p className="print-client-name">Client: <strong>{clientName.trim()}</strong></p>
+            ) : null}
+            <p className="print-date">Prepared {preparedDate}</p>
+          </div>
         </div>
       </header>
 
@@ -106,12 +114,7 @@ export function PrintReport({
             </small>
           </div>
         ) : null}
-        <div className="print-stat-grid">
-          <div><span>Starting amount</span><strong>{formatCurrency(input.initialAmount)}</strong></div>
-          <div><span>Total contributions</span><strong>{formatCurrency(result.totalContributions)}</strong></div>
-          <div><span>Growth</span><strong>{formatCurrency(result.totalGrowth)}</strong></div>
-          <div><span>Withdrawals</span><strong>{formatCurrency(result.totalWithdrawals)}</strong></div>
-        </div>
+        <SummaryMetrics input={input} result={result} print />
       </section>
 
       <section className="print-assumptions">
@@ -167,8 +170,9 @@ export function PrintReport({
 
       <p className="print-disclaimer">
         This projection is illustrative and depends on the assumptions entered. It does not
-        guarantee future returns and is not financial advice. Annual fees are deducted from the
-        assumed return; tax and inflation are not included. Actual investment values can rise or fall.
+        guarantee future returns and is not financial advice. Cumulative growth is estimated growth
+        as a percentage of total contributions, including the starting amount. Annual fees are
+        deducted from the assumed return; tax and inflation are not included. Actual investment values can rise or fall.
       </p>
 
       <footer className="print-footer">

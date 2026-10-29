@@ -9,9 +9,11 @@ import type {
 import { AnnualTable } from "@/components/annual-table";
 import { GrowthChart } from "@/components/growth-chart";
 import { PrintReport } from "@/components/print-report";
+import { SummaryMetrics } from "@/components/summary-metrics";
 import { formatCurrency } from "@/lib/format";
 
 type ResultsPanelProps = {
+  clientName: string;
   input: ProjectionInput;
   result: ProjectionResult | null;
   mode: "growth" | "goal";
@@ -24,6 +26,7 @@ type ResultsPanelProps = {
 };
 
 export function ResultsPanel({
+  clientName,
   input,
   result,
   mode,
@@ -110,20 +113,7 @@ export function ResultsPanel({
             </div>
           )}
 
-          <div className="metrics-row">
-            <div className="metric">
-              <span className="metric-icon contributions-icon" aria-hidden="true">↗</span>
-              <div><span>Total contributions</span><strong>{formatCurrency(result.totalContributions)}</strong></div>
-            </div>
-            <div className="metric">
-              <span className="metric-icon growth-icon" aria-hidden="true">✳</span>
-              <div><span>Estimated growth</span><strong>{formatCurrency(result.totalGrowth)}</strong></div>
-            </div>
-            <div className="metric">
-              <span className="metric-icon withdrawals-icon" aria-hidden="true">↘</span>
-              <div><span>Total withdrawals</span><strong>{formatCurrency(result.totalWithdrawals)}</strong></div>
-            </div>
-          </div>
+          <SummaryMetrics input={input} result={result} />
 
           {result.depletionYear ? (
             <div className="depletion-notice" role="status">
@@ -193,11 +183,12 @@ export function ResultsPanel({
           </div>
 
           <p className="results-disclaimer">
-            These figures are illustrative estimates. Annual fees are deducted from the assumed return;
-            tax and inflation are not included.
+            Cumulative growth is estimated growth as a percentage of total contributions, including the starting amount.
+            Annual fees are deducted from the assumed return; tax and inflation are not included.
           </p>
 
           <PrintReport
+            clientName={clientName}
             input={input}
             result={result}
             mode={mode}
