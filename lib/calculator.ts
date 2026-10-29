@@ -175,7 +175,17 @@ export function calculateRequiredSaving(
     if (calculateProjection(projectionInput(0)).finalBalance >= input.targetAmount) return 0;
 
     let low = 0;
-    let high = 10_000_000;
+    const withdrawal = input.withdrawal;
+    const maximumScheduledWithdrawals =
+      withdrawal?.type === "one-time"
+        ? withdrawal.amount
+        : withdrawal?.type === "recurring"
+          ? withdrawal.amount *
+            (input.years - withdrawal.startYear + 1) *
+            (withdrawal.frequency === "monthly" ? 12 : 1)
+          : 0;
+    let high = input.targetAmount + maximumScheduledWithdrawals;
+    if (!Number.isFinite(high)) return null;
     if (calculateProjection(projectionInput(high)).finalBalance < input.targetAmount) return null;
 
     for (let iteration = 0; iteration < 64; iteration += 1) {
