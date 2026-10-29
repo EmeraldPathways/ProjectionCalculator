@@ -13,6 +13,7 @@ Create a client-facing Omega savings and investment projection calculator in the
 - Support a starting lump sum, recurring savings, time horizon, assumed annual return, optional annual contribution increases, withdrawals, and goal mode that calculates required monthly or annual savings.
 - Show yearly contributions, withdrawals, growth, and end-of-year balance.
 - Use Omega's supplied logo and palette: burgundy `#661E24`, muted gold `#988B54`, cream `#E1DECE`, olive `#6D5A0C`, and white. The white logo sits on a dark brand panel.
+- Show the Sandyford consultation CTA and Central Bank regulation line in the on-screen page footer and the printed report.
 - Make the page responsive and accessible for keyboard and screen-reader users.
 - Keep all calculations and print preparation in the browser; do not add user accounts, a database, or server-side storage.
 
