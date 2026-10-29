@@ -31,6 +31,7 @@ export interface AnnualProjection {
 export interface ProjectionResult {
   annualRows: AnnualProjection[];
   finalBalance: number;
+  /** Starting amount plus later scheduled contributions. */
   totalContributions: number;
   totalWithdrawals: number;
   totalGrowth: number;
@@ -149,7 +150,7 @@ export function calculateProjection(input: ProjectionInput): ProjectionResult {
   return {
     annualRows,
     finalBalance: balance,
-    totalContributions,
+    totalContributions: input.initialAmount + totalContributions,
     totalWithdrawals,
     totalGrowth,
     depletionYear,
