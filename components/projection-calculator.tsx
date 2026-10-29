@@ -93,6 +93,7 @@ export function ProjectionCalculator() {
 
   const selectedGoalContribution =
     goalFrequency === "monthly" ? requiredMonthly : requiredAnnual;
+  const goalSolverUnavailable = mode === "goal" && selectedGoalContribution === null;
   const projectionInput: ProjectionInput =
     mode === "goal"
       ? {
@@ -104,12 +105,13 @@ export function ProjectionCalculator() {
 
   const result = useMemo<ProjectionResult | null>(() => {
     if (Object.keys(validationErrors).length > 0) return null;
+    if (goalSolverUnavailable) return null;
     try {
       return calculateProjection(projectionInput);
     } catch {
       return null;
     }
-  }, [projectionInput, validationErrors]);
+  }, [goalSolverUnavailable, projectionInput, validationErrors]);
 
   return (
     <main className="site-shell">
@@ -160,8 +162,14 @@ export function ProjectionCalculator() {
           goalFrequency={goalFrequency}
           requiredMonthly={requiredMonthly}
           requiredAnnual={requiredAnnual}
-          canCalculate={Object.keys(validationErrors).length === 0}
-          validationErrors={Object.values(validationErrors)}
+          canCalculate={Object.keys(validationErrors).length === 0 && !goalSolverUnavailable}
+          validationErrors={
+            Object.keys(validationErrors).length > 0
+              ? Object.values(validationErrors)
+              : goalSolverUnavailable
+                ? ["This goal could not be calculated with the selected assumptions. Try reducing the goal or extending the timeframe."]
+                : []
+          }
         />
       </section>
 
