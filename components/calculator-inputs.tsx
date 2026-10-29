@@ -499,7 +499,7 @@ export function CalculatorInputs({
 
       <div className="assumption-note">
         <span className="info-icon" aria-hidden="true">i</span>
-        <p>Figures are illustrative and do not include fees, tax or inflation.</p>
+        <p>Figures are illustrative. Annual fees are deducted from the assumed return; tax and inflation are not included.</p>
       </div>
       <button
         className="reset-button"
