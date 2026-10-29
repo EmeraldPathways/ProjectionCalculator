@@ -19,8 +19,9 @@ export function formatCompactCurrency(value: number): string {
   return compactEuroFormatter.format(Number.isFinite(value) ? value : 0);
 }
 
-export function formatPercent(value: number): string {
+export function formatPercent(value: number, minimumFractionDigits = 0): string {
   return new Intl.NumberFormat("en-IE", {
+    minimumFractionDigits,
     maximumFractionDigits: 2,
   }).format(value) + "%";
 }

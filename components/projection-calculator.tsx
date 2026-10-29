@@ -17,6 +17,7 @@ const defaultInput: ProjectionInput = {
   contributionFrequency: "monthly",
   annualIncreasePercent: 0,
   annualReturnPercent: 5,
+  annualFeePercent: 0,
   years: 25,
 };
 
@@ -68,6 +69,7 @@ export function ProjectionCalculator() {
       calculateRequiredSaving({
         initialAmount: input.initialAmount,
         annualReturnPercent: input.annualReturnPercent,
+        annualFeePercent: input.annualFeePercent,
         annualIncreasePercent: input.annualIncreasePercent,
         years: input.years,
         contributionFrequency: "monthly",
@@ -82,6 +84,7 @@ export function ProjectionCalculator() {
       calculateRequiredSaving({
         initialAmount: input.initialAmount,
         annualReturnPercent: input.annualReturnPercent,
+        annualFeePercent: input.annualFeePercent,
         annualIncreasePercent: input.annualIncreasePercent,
         years: input.years,
         contributionFrequency: "annual",

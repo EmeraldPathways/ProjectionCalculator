@@ -193,7 +193,8 @@ export function ResultsPanel({
           </div>
 
           <p className="results-disclaimer">
-            These figures are illustrative estimates. Fees, tax and inflation are not included.
+            These figures are illustrative estimates. Annual fees are deducted from the assumed return;
+            tax and inflation are not included.
           </p>
 
           <PrintReport

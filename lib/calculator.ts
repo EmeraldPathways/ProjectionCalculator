@@ -15,6 +15,7 @@ export interface ProjectionInput {
   contributionFrequency: ContributionFrequency;
   annualIncreasePercent: number;
   annualReturnPercent: number;
+  annualFeePercent: number;
   years: number;
   withdrawal?: Withdrawal;
 }
@@ -67,6 +68,9 @@ function isValidInput(input: ProjectionInput): boolean {
     Number.isFinite(input.annualReturnPercent) &&
     input.annualReturnPercent >= 0 &&
     input.annualReturnPercent <= 15 &&
+    Number.isFinite(input.annualFeePercent) &&
+    input.annualFeePercent >= 0 &&
+    input.annualFeePercent <= 5 &&
     Number.isInteger(input.years) &&
     input.years >= 1 &&
     input.years <= 40 &&
@@ -79,7 +83,8 @@ export function calculateProjection(input: ProjectionInput): ProjectionResult {
     throw new RangeError("Enter valid, non-negative values within the displayed limits.");
   }
 
-  const monthlyRate = input.annualReturnPercent / 100 / 12;
+  const netAnnualReturnPercent = input.annualReturnPercent - input.annualFeePercent;
+  const monthlyRate = netAnnualReturnPercent / 100 / 12;
   const annualIncrease = input.annualIncreasePercent / 100;
   let balance = input.initialAmount;
   let cumulativeContributions = 0;
@@ -168,6 +173,7 @@ export function calculateRequiredSaving(
     contributionFrequency: input.contributionFrequency,
     annualIncreasePercent: input.annualIncreasePercent,
     annualReturnPercent: input.annualReturnPercent,
+    annualFeePercent: input.annualFeePercent,
     years: input.years,
     withdrawal: input.withdrawal,
   });

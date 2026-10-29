@@ -15,11 +15,16 @@ type NumericFieldProps = {
   min: number;
   max: number;
   step?: number;
+  decimalPlaces?: number;
   suffix?: string;
   help?: string;
   onChange: (value: number) => void;
   onValidityChange: (field: string, message: string) => void;
 };
+
+function formatNumericValue(value: number, decimalPlaces?: number): string {
+  return decimalPlaces === undefined ? String(value) : value.toFixed(decimalPlaces);
+}
 
 function NumericField({
   id,
@@ -28,20 +33,27 @@ function NumericField({
   min,
   max,
   step = 1,
+  decimalPlaces,
   suffix,
   help,
   onChange,
   onValidityChange,
 }: NumericFieldProps) {
-  const [rawValue, setRawValue] = useState(String(value));
+  const [rawValue, setRawValue] = useState(formatNumericValue(value, decimalPlaces));
   const lastPropValue = useRef(value);
 
   useEffect(() => {
     if (value !== lastPropValue.current) {
-      setRawValue(String(value));
+      setRawValue(formatNumericValue(value, decimalPlaces));
       lastPropValue.current = value;
     }
-  }, [value]);
+  }, [value, decimalPlaces]);
+
+  const parsedRawValue = Number(rawValue);
+  const hasPrecisionError =
+    decimalPlaces !== undefined &&
+    Number.isFinite(parsedRawValue) &&
+    parsedRawValue !== Number(parsedRawValue.toFixed(decimalPlaces));
 
   function update(raw: string) {
     setRawValue(raw);
@@ -53,6 +65,10 @@ function NumericField({
     const parsed = Number(raw);
     if (!Number.isFinite(parsed) || parsed < min || parsed > max) {
       onValidityChange(id, "Enter a value from " + min + " to " + max + ".");
+      return;
+    }
+    if (decimalPlaces !== undefined && parsed !== Number(parsed.toFixed(decimalPlaces))) {
+      onValidityChange(id, "Enter no more than " + decimalPlaces + " decimal places.");
       return;
     }
 
@@ -78,16 +94,36 @@ function NumericField({
           inputMode="decimal"
           value={rawValue}
           onChange={(event) => update(event.target.value)}
+          onBlur={() => {
+            if (
+              rawValue.trim() !== "" &&
+              Number.isFinite(parsedRawValue) &&
+              parsedRawValue >= min &&
+              parsedRawValue <= max &&
+              !hasPrecisionError
+            ) {
+              setRawValue(formatNumericValue(parsedRawValue, decimalPlaces));
+            }
+          }}
           aria-describedby={help ? id + "-help" : undefined}
-          aria-invalid={rawValue.trim() === "" || Number(rawValue) < min || Number(rawValue) > max}
+          aria-invalid={
+            rawValue.trim() === "" ||
+            !Number.isFinite(parsedRawValue) ||
+            parsedRawValue < min ||
+            parsedRawValue > max ||
+            hasPrecisionError
+          }
         />
         {id.toLowerCase().includes("amount") || id === "goal-target" ? (
           <span className="input-currency" aria-hidden="true">€</span>
         ) : null}
       </div>
       {help ? <p className="field-help" id={id + "-help"}>{help}</p> : null}
-      {rawValue.trim() !== "" && (Number(rawValue) < min || Number(rawValue) > max) ? (
+      {rawValue.trim() !== "" && (parsedRawValue < min || parsedRawValue > max) ? (
         <p className="field-error" role="alert">Enter a value from {min} to {max}.</p>
+      ) : null}
+      {hasPrecisionError ? (
+        <p className="field-error" role="alert">Enter no more than {decimalPlaces} decimal places.</p>
       ) : null}
       {rawValue.trim() === "" ? (
         <p className="field-error" role="alert">Enter a value to continue.</p>
@@ -294,6 +330,20 @@ export function CalculatorInputs({
           suffix="%"
           help="An assumption for illustration. Actual returns vary."
           onChange={(value) => onInputChange({ annualReturnPercent: value })}
+          onValidityChange={onFieldValidityChange}
+        />
+
+        <NumericField
+          id="annual-fee"
+          label="Annual fee"
+          value={input.annualFeePercent}
+          min={0}
+          max={5}
+          step={0.01}
+          decimalPlaces={2}
+          suffix="%"
+          help="Deducted from the assumed annual return in this projection."
+          onChange={(value) => onInputChange({ annualFeePercent: value })}
           onValidityChange={onFieldValidityChange}
         />
 

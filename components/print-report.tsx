@@ -127,6 +127,7 @@ export function PrintReport({
           </div>
           <div><dt>Timeframe</dt><dd>{input.years} years</dd></div>
           <div><dt>Assumed annual return</dt><dd>{formatPercent(input.annualReturnPercent)}</dd></div>
+          <div><dt>Annual fee</dt><dd>{formatPercent(input.annualFeePercent, 2)}</dd></div>
           <div><dt>Annual savings increase</dt><dd>{formatPercent(input.annualIncreasePercent)}</dd></div>
           <div><dt>Withdrawal schedule</dt><dd>{withdrawalDescription(input)}</dd></div>
           {mode === "goal" ? (
@@ -166,8 +167,8 @@ export function PrintReport({
 
       <p className="print-disclaimer">
         This projection is illustrative and depends on the assumptions entered. It does not
-        guarantee future returns and is not financial advice. Fees, tax and inflation are not
-        included. Actual investment values can rise or fall.
+        guarantee future returns and is not financial advice. Annual fees are deducted from the
+        assumed return; tax and inflation are not included. Actual investment values can rise or fall.
       </p>
 
       <footer className="print-footer">
