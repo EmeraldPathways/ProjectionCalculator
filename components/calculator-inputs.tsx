@@ -333,19 +333,10 @@ export function CalculatorInputs({
           onValidityChange={onFieldValidityChange}
         />
 
-        <NumericField
-          id="annual-fee"
-          label="Annual fee"
-          value={input.annualFeePercent}
-          min={0}
-          max={5}
-          step={0.01}
-          decimalPlaces={2}
-          suffix="%"
-          help="Deducted from the assumed annual return in this projection."
-          onChange={(value) => onInputChange({ annualFeePercent: value })}
-          onValidityChange={onFieldValidityChange}
-        />
+        <div className="fixed-fee-assumption" aria-label="Annual fee, fixed">
+          <span className="field-label">Annual fee</span>
+          <strong>1.00%</strong>
+        </div>
 
         {mode === "goal" ? (
           <div className="choice-field">
