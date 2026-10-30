@@ -17,7 +17,7 @@ const defaultInput: ProjectionInput = {
   contributionFrequency: "monthly",
   annualIncreasePercent: 0,
   annualReturnPercent: 5,
-  annualFeePercent: 0,
+  annualFeePercent: 1,
   years: 25,
 };
 
