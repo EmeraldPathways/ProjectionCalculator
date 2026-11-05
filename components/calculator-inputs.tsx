@@ -333,9 +333,39 @@ export function CalculatorInputs({
           onValidityChange={onFieldValidityChange}
         />
 
-        <div className="fixed-fee-assumption" aria-label="Annual fee, fixed">
-          <span className="field-label">Annual fee</span>
-          <strong>1.00%</strong>
+        <NumericField
+          id="annual-fee"
+          label="Annual fee"
+          value={input.annualFeePercent}
+          min={0}
+          max={5}
+          step={0.01}
+          decimalPlaces={2}
+          suffix="%"
+          help="Deducted from the assumed annual return in this projection."
+          onChange={(value) => onInputChange({ annualFeePercent: value })}
+          onValidityChange={onFieldValidityChange}
+        />
+
+        <div className="range-field">
+          <div className="range-title">
+            <label htmlFor="annual-fee-range">Adjust annual fee</label>
+            <span><strong>{input.annualFeePercent.toFixed(2)}%</strong></span>
+          </div>
+          <input
+            id="annual-fee-range"
+            className="range-input"
+            type="range"
+            min={0}
+            max={5}
+            step={0.01}
+            value={input.annualFeePercent}
+            aria-label="Annual fee percentage"
+            onChange={(event) =>
+              onInputChange({ annualFeePercent: Number(event.target.value) })
+            }
+          />
+          <div className="range-endpoints"><span>0.00%</span><span>5.00%</span></div>
         </div>
 
         {mode === "goal" ? (
