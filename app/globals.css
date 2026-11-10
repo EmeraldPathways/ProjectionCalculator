@@ -291,14 +291,14 @@ h1, h2, h3, p { margin-top: 0; }
   .site-footer { margin-top: 13px; padding: 20px 18px 15px; border-radius: 15px; }
 }
 @media print {
-  @page { size: A4 portrait; margin: 14mm; }
+  @page { size: A4 portrait; margin: 0; }
   html, body { width: auto !important; min-width: 0 !important; background: #fff !important; color: #242520 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
   body { font-family: Arial,Helvetica,sans-serif; font-size: 9pt; }
   .site-shell { width: auto; max-width: none; margin: 0; padding: 0; }
   .page-header, .calculator-card, .results-topline, .hero-result, .goal-result, .metrics-row, .depletion-notice, .validation-notice, .visual-heading, .visual-panel, .results-disclaimer, .site-footer { display: none !important; }
   .workspace { display: block; margin: 0; }
   .results-card { display: block; padding: 0; border: 0; border-radius: 0; box-shadow: none; }
-  .print-report { display: block !important; color: #242520; font-size: 8.5pt; }
+  .print-report { display: block !important; color: #242520; font-size: 8.5pt; padding: 14mm; }
   .print-brand-panel, .print-contact { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
   .print-assumptions, .print-summary-main, .print-stat-grid > div, .print-chart-wrap { break-inside: avoid; page-break-inside: avoid; }
   .print-table-section { break-before: page; page-break-before: always; }
